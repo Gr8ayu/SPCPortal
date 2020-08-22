@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{%block main_content%}
+<div class="section container red lighten-5">
+
+
+
+    <h1>Offers</h1>
+
+
+
+
+    <form method="POST">
+    {% csrf_token %}
+        <div class="input-field col s12">
+            <select name="offer">
+                <option value="{{offer.id}}"  selected>{{offer}} [{{offer.id}}]</option>
+            </select>
+            <label>Offer</label>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            {% for key, value in students.items %}
+            <div class="input-field col s4">
+                <select name="student" multiple>
+                    <option value="" disabled>Student applied from {{key}}</option>
+
+                    {% for student in value %}
+
+                    {% if student in applied_students %}
+                    <option selected value="{{student.id}}">{{student.USN }} : {{ student.name}}</option>
+                    {% else %}
+                    <option value="{{student.id}}">{{student.USN }} : {{ student.name}}</option>
+
+                    {% endif %}
+
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+            {% endfor %}
+
+
+
+        </div>
+
+        <button type="submit" class="waves-effect waves-light btn">Submit</button>
+
+    </form>
+
+
+
+
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
+{%endblock%}

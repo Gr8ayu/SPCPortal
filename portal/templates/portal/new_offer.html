@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{%block main_content%}
+<div class="section red lighten-5">
+
+
+    <h3>Add offer</h3>
+    <div class="row">
+
+        <form class="col s12" method="POST" >
+        {% csrf_token %}
+
+            <div class="row">
+                <div class="input-field col s6">
+                    <input placeholder="Placeholder" name="company_name" id="company_name" type="text" class="validate">
+                    <label for="company_name">Company Name</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="position" name="position" type="text" class="validate">
+                    <label for="position">Position</label>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="link" name="link" type="text" class="validate">
+                    <label for="link">link</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s4">
+                    <select multiple name="department">
+                        <option value="" disabled>Choose your option</option>
+
+                        {% for dept in departments %}
+                        <option value="{{dept}}">{{dept}}</option>
+                        {% endfor %}
+
+                    </select>
+                    <label>Eligible departments</label>
+
+
+                </div>
+
+                <div class="col s4 ">
+                    <label>
+                        <input name="open_dream" type="checkbox" />
+                        <span>Open Dream</span>
+                    </label>
+                </div>
+            </div>
+
+            <hr>
+
+
+            {% for key, value in students.items %}
+            <div class="input-field col s4">
+                <select name="student" multiple>
+                    <option value="" disabled>Student applied from {{key}}</option>
+
+                    {% for student in value %}
+                    <option value="{{student.id}}">{{student.USN }} : {{ student.name}}</option>
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            {% endfor %}
+
+
+        <button type="submit" class="waves-effect waves-light btn">Submit</button>
+
+        </form>
+    </div>
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
+{%endblock%}
