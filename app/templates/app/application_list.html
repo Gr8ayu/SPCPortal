@@ -1,0 +1,34 @@
+{% extends 'app/base.html' %}
+
+{% block main %}
+
+
+<h1>Applications</h1>
+<ul>
+{% for application in object_list %}
+    <!-- <li>{{ article.pub_date|date }} - {{ article.headline }}</li> -->
+    <li><a href="">{{application.student}}, {{application.offer.company}},  {{application.status}}</a></li>
+
+{% empty %}
+    <li>No offers yet.</li>
+{% endfor %}
+</ul>
+
+{% block pagination %}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+  {% endblock %} 
+{%endblock%}

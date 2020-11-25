@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-lg-8 col-md-6 col-sm-12" style="border:2px solid blue">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 " style="border:2px solid blue">
+                    <h1>STUDENT FORM</h1>
+                    <form method="post"  enctype="multipart/form-data" action="{%url 'edit_profile_details'%}">
+                        {% csrf_token %}
+                        <table>{{student_form|crispy}}</table>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                
+                <div class="col-lg-6 col-md-12 col-sm-12" style="border:2px solid blue">
+                    <h1>CONTACT FORM</h1>
+                    <form method="post" action="{%url 'edit_profile_contact'%}">
+                        {% csrf_token %}
+                        <table>{{ contact_form|crispy}}</table>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12"  style="border:2px solid blue">
+            <h1>EDUCATION FORM</h1>
+            <form method="post" action="{%url 'edit_profile_education'%}">
+                {% csrf_token %}
+                <table>{{edu_form|crispy}}</table>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

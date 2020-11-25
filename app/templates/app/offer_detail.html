@@ -1,0 +1,36 @@
+{% extends 'app/base.html' %}
+
+{% block main %}
+
+
+
+<h1>{{ object }}</h1>
+<p>offer : {{ object.offer }}</p>
+<p>date: {{ object.date }}</p>
+<p>deadline: {{ object.deadline}}</p>
+<p> day left {{ object.date|timesince:object.deadline }}</p>
+
+<p>eligible_branches:
+    <ul>
+        {% for branch in object.eligible_branches.all %}
+        <li>{{ branch }}</li>
+        {% endfor %}
+    </ul>
+
+
+
+Elegible : {{elegible}}
+
+{%if elegible%}
+<a href="{%url 'add_application' object.id%}">Apply</a>
+
+{%endif%}
+
+
+<br>
+
+{% for e in elegiblity_reasons %}
+{{e}}
+<br>
+{%endfor%}
+{%endblock%}

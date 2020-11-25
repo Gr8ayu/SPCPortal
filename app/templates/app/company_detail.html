@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+
+{% block main %}
+
+    {{object}}
+<hr>
+    {%for offer in object.offer.all%}
+        {{offer}}
+    {%endfor%}
+
+
+{%endblock%}

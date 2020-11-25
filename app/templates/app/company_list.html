@@ -1,0 +1,57 @@
+
+{% extends 'app/base.html' %}
+
+{% block main %}
+
+
+<h1>Companies</h1>
+<ul>
+
+
+    <div class="team-boxed">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Companies </h2>
+                <p class="text-center">Nunc luctus in metus eget fringilla. Aliquam sed justo ligula. Vestibulum nibh erat, pellentesque ut laoreet vitae.</p>
+            </div>
+            <div class="row people">
+                {% for company in object_list %}
+                    <div class="col-md-6 col-lg-4 item">
+                        <div class="box"><img class="rounded-circle" src="https://www.101dogbreeds.com/wp-content/uploads/2016/04/Medium-Sized-Dog-Breeds.jpg">
+                            <h3 class="name"><a href="{%url 'company_details' company.id %}">{{company}}</a></h3>
+                            <p class="title">Stylist</p>
+                            <p class="description">{{company.description}} </p>
+                            <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <li>No offers yet.</li>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</ul>
+
+{% block pagination %}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+  {% endblock %} 
+{%endblock%}
