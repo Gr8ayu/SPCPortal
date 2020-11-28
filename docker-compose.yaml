@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  spcportal:
+    build: .
+    volumes:
+      - .:/code
+      - static_volume:/code/staticfiles  # <-- bind the static volume
+      - media_volume:/code/media
+    networks:
+      - nginx_network
+      - database_network
+    depends_on:  # <-- wait for db to be "ready" before starting the app
+      - postgres
+
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/code/staticfiles  # <-- bind the static volume
+      - media_volume:/code/media
+    depends_on:
+      - spcportal
+    networks:
+      - nginx_network
+
+  postgres:  # <-- IMPORTANT: same name as in DATABASES setting, otherwise Django won't find the database!
+    image: postgres:10
+    restart: always
+    env_file:  # <-- we use the previously defined values
+      - config/db/database_env
+    networks:  # <-- connect to the bridge
+      - database_network
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+    ports: 
+        - 5432:5432
+
+networks:  
+  nginx_network:
+    driver: bridge
+  database_network:  # <-- add the bridge
+    driver: bridge
+
+volumes:
+  database_volume:
+  static_volume:
+  media_volume: 

@@ -2,12 +2,27 @@
 
 {% block main %}
 
+<form method="GET" action="{%url 'offers' %}">
+    <input type="text" name="name" placeholder="Search">
+    <input type="checkbox" name="eligible_only">
+    <label for="name">Eligible Only</label>
+    <input type="checkbox" name="dream_only">
+    <label for="name">Dream</label>
+    <input type="checkbox" name="open_dream_only">
+    <label for="name">Open Dream</label>
+    <input type="submit" value="Filter">
 
+</form>
 <h1>Offers</h1>
 <ul>
 {% for offer in object_list %}
     <!-- <li>{{ article.pub_date|date }} - {{ article.headline }}</li> -->
-    <li><a href="{%url 'offer_details' offer.id %}">{{offer}}</a></li>
+    <li><a href="{%url 'offer_details' offer.id %}">{{offer}}</a>
+
+        <p>
+            {{offer.note}}
+        </p>
+    </li>
 
 {% empty %}
     <li>No offers yet.</li>

@@ -50,11 +50,11 @@ class Student(models.Model):
         return self.user.username
 
     def is_placed(self):
-        applications  = Application.objects.filter(student=self, status='ACCEPTED')
-        if applications.count() > 1:
-            return True
+        applications  = Application.objects.filter(student=self, status='ACCEPTED', offer__offer_type='OPEN')
+        if applications.count() > 0:
+            return applications
         else:
-            return False
+            return None
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -141,17 +141,29 @@ class Offer(models.Model):
             ('DREAM',"Dream"),
             ('OPEN',"Open Dream"),
         )
+
+    CATEGORY = (
+            ('INTERNSHIP',"Internship"),
+            ('PLACEMENT',"Placement"),
+        )
+
+
+
+
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='offer')
     date = models.DateTimeField(default=datetime.datetime.now)
     deadline = models.DateTimeField()
     offer_type = models.CharField(max_length=20, default='DREAM', choices=OFFER_TYPE)
+    category = models.CharField(max_length=20, default='INTERNSHIP', choices=CATEGORY)
+    
     required_batch = models.IntegerField( null=True, blank=True)
     eligible_branches = models.ManyToManyField(Department, related_name="eligible_branches")
+    eligible_gender = MultiSelectField(choices=GENDER, default='OTHER')
     package = models.FloatField(help_text="CTC in LPA", null=True, blank=True)
     note = models.TextField(blank=True)
     cgpa_cutoff = models.FloatField(default=0)
     X_cutoff = models.FloatField(default=0)
-    XII_cutoff = models.FloatField(default=0)
+    XII_cutoff = models.FloatField(help_text="12th/Diploma cutoff percentage", default=0)
     # diploma_cutoff = models.FloatField(default=0)
 
     def __str__(self):
@@ -173,6 +185,24 @@ class Application(models.Model):
     
     def __str__(self):
         return self.student.name
+
+@receiver(post_save, sender=Application)
+def save_edu_contact(sender, instance, **kwargs):
+
+    if instance.status == 'ACCEPTED' and instance.offer.offer_type == 'OPEN':
+        student = instance.student
+        student.is_eligible = False
+        student.save()
+    # if not instance.contact:
+    #     Contact.objects.create(user=instance)
+    
+    # if not instance.education:
+    #     Education.objects.create(user=instance)
+    
+    # instance.contact.save()
+    # instance.education.save()
+
+
 
 
 class SPC(models.Model):

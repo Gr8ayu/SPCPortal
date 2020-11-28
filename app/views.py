@@ -143,22 +143,6 @@ def edit_profile_details(request):
 
         return redirect('dashboard')
 
-    
-
-
-class OfferListView(ListView):
-
-    model = Offer
-    paginate_by = 5  # if pagination is desired
-
-
-    def get_queryset(self):
-        qs = super(OfferListView, self).get_queryset()
-        return qs.order_by('-id')
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 def CheckElegibleForApplication(student, offer):
 
@@ -169,7 +153,7 @@ def CheckElegibleForApplication(student, offer):
 
 
     if not is_elegible:
-        errors.append("Student is not elegible.")
+        errors.append("Student is not elegible or already placed in open Dream Company")
 
     if Application.objects.filter(student=student, offer=offer).count() >0:
         is_elegible = False
@@ -200,7 +184,61 @@ def CheckElegibleForApplication(student, offer):
         is_elegible = False
         errors.append("XII / Diploma percentage Cutoff requirement not met.")
 
+
+    if student.gender not in offer.eligible_gender or "OTHER" in offer.eligible_gender:
+        is_elegible = False
+        errors.append("your Gender is not elegible")
+
+    
+
     return is_elegible, errors
+    
+
+
+class OfferListView(ListView):
+
+    model = Offer
+    paginate_by = 10  # if pagination is desired
+
+
+    def get_queryset(self):
+        qs = super(OfferListView, self).get_queryset()
+        # name = self.kwargs.get('name', '')
+        filters = self.request.GET
+        print(filters)
+        # print(filters)
+        if 'name' in filters.keys():
+            # print(True)
+            # print(filters['name'])
+            qs1 =  qs.filter(company__name__icontains=filters['name'] )
+            qs2 = qs.filter(note__icontains=filters['name'])
+            qs = qs1 | qs2
+        
+        if "eligible_only" in filters.keys():
+            print("eligible_only")
+            ids = []
+            for q in qs:
+                is_elegible, errors = CheckElegibleForApplication(self.request.user.student,q )
+                if is_elegible:
+                    ids.append(q.id)
+            print(len(qs))
+            qs = qs.filter(pk__in=ids) 
+            print(len(qs))
+
+
+        if 'dream_only' in filters.keys():
+            qs =qs.filter(offer_type='DREAM')
+
+        if 'open_dream_only' in filters.keys():
+            qs =qs.filter(offer_type='OPEN')
+
+
+
+        return qs.order_by('-id')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 class OfferDetailView(DetailView):
 
@@ -272,3 +310,7 @@ def AddApplication(request, id):
         return redirect('my_applications')
     else:
         return redirect('offer_details', pk=id)
+
+
+
+#TODO Add gender in elegibility criteria
