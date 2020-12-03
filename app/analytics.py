@@ -83,7 +83,7 @@ def offers_by_companies_count(*args):
 
 
     # No of offers made/Visited by company yearwise
-    # Offer.objects.all().values('date__year',).annotate(count=Count('date__year'))
+    # Offer.objects.all().values('date__year',).annotate(count=Count('date__year')) 
     # Application.objects.filter(status="ACCEPTED").values('offer__date__year',).annotate(count=Count('id'))
 
 
@@ -93,3 +93,12 @@ def offers_by_companies_count(*args):
 
 
     pass
+
+
+def emails():
+    Offer.objects.all()[6].eligible_branches.all().values('id')
+    Offer.objects.all()[6].required_batch
+    list(map(lambda x:x['id'], branches ))
+    DepartmentGroupEmail.objects.filter(graduation_year=2022).filter(id__in=blist).values('email')
+    
+    list(map(lambda x:x['email'], e ))

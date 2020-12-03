@@ -47,7 +47,7 @@ class Department(models.Model):
     name = models.CharField(max_length=50 )
     # hod = models.ForeignKey(Faculties, on_delete=models.SET_NULL, null=True)
     description = models.TextField()
-
+    group_email = models.EmailField()
     def __str__(self):
         return self.name
 
@@ -171,9 +171,6 @@ class Offer(models.Model):
             ('PLACEMENT',"Placement"),
         )
 
-
-
-
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='offer')
     date = models.DateTimeField(default=datetime.datetime.now)
     deadline = models.DateTimeField()
@@ -247,3 +244,11 @@ class Faculty(models.Model):
 
     def __str__(self):
         return self.name
+
+class DepartmentGroupEmail(models.Model):
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    email = models.EmailField(unique=True)
+    graduation_year = models.IntegerField()
+
+    def __str__(self):
+        return self.email

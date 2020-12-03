@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('offers/', login_required(views.OfferListView.as_view()), name='offers'),
     path('offer/details/<int:pk>/', login_required(views.OfferDetailView.as_view()), name='offer_details'),
+    path('offer/sendmail/<int:pk>/', views.sendOfferAlert, name='offer_alert'),
 
     path('companies/', login_required(views.CompanyListView.as_view()), name='companies'),
     path('company/details/<int:pk>/', login_required(views.CompanyDetailView.as_view()), name='company_details'),

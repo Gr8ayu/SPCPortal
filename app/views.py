@@ -18,10 +18,11 @@
 
 from django.shortcuts import redirect
 from django.shortcuts import render
-
+import os
 from django.contrib.auth.decorators import login_required
 from .forms import ContactForm, EducationForm, StudentForm
-from .models import Contact, Education, Student, Offer, Company, Application
+# from .models import Contact, Education, Student, Offer, Company, Application
+from .models import *
 from django.contrib import messages
 
 from django.views.generic.list import ListView
@@ -32,12 +33,25 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Avg, Max, Min, Sum
 from app.analytics import pie_dream_open_offer, pie_branch_offer
 from django.db.models.functions import Coalesce
+from django.template.loader import render_to_string
+from django.core import mail
+from django.utils.html import strip_tags
+
 
 def home(request):
+
     return render(request, 'app/home.html')
+    # return render(request, 'app/offer_email_template.html')
 
 @login_required
 def dashboard(request):
+
+    # # messages.debug(request, 'debug %s SQL statements were executed.' % 5)
+    # messages.info(request, 'info Three credits remain in your account.')
+    # # messages.success(request, 'success Profile details updated.')
+    # # messages.warning(request, 'warning Your account expires in three days.')
+    # # messages.error(request, 'error Document deleted.')
+    
     user = request.user
     student = request.user.student
     contact = student.contact
@@ -103,7 +117,7 @@ def edit_contact_details(request):
 
             msg = "Message"
             error = "Successfully saved"
-            messages.error(request, f"{msg}: {error}")
+            messages.success(request, 'Contact details Updated.')
         else:
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
@@ -128,7 +142,8 @@ def edit_education_details(request):
 
             msg = "Message"
             error = "Successfully saved"
-            messages.error(request, f"{msg}: {error}")
+            messages.success(request, 'Education details Updated.')
+            
         else:
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
@@ -151,7 +166,8 @@ def edit_profile_details(request):
 
             msg = "Message"
             error = "Successfully saved"
-            messages.error(request, f"{msg}: {error}")
+            messages.success(request, 'Profile Updated.')
+            
         else:
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
@@ -270,9 +286,61 @@ class OfferDetailView(DetailView):
 
 
         context['elegible'] = is_elegible
+
+        if is_elegible:
+            messages.success(self.request, 'Eligible for Application.')
+        else:
+            messages.warning(self.request, 'Not eligible.')
+
+
+
         context['elegiblity_reasons'] = errors
 
         return context
+
+@login_required
+def sendOfferAlert(request, pk):
+    if request.user.is_admin :
+
+        if request.method == 'POST':
+            offer = get_object_or_404(Offer, pk=pk)
+            
+            subject = "RVCE Placements : "+ str(offer.company.name)
+            to = request.POST.getlist('email_list')
+            to = list(to)
+
+            print(to)
+            from_email = os.getenv('DEFAULT_FROM_EMAIL')
+            html_message = render_to_string('app/offer_email_template.html', { 'offer':offer})
+            plain_message = strip_tags(html_message)
+            
+            status = mail.send_mail(subject, plain_message, from_email, to, html_message=html_message)
+
+            if status == 1:
+                messages.success(request, 'Mail sent.')
+
+            return redirect('dashboard')
+            
+        else:
+            offer = get_object_or_404(Offer, pk=pk)
+            email_list = DepartmentGroupEmail.objects.all().values('email')
+            email_list = list(map(lambda x:x['email'], email_list ))
+
+
+            branches = offer.eligible_branches.all().values('id')
+            ids = list(map(lambda x:x['id'], branches ))
+
+            batch = offer.required_batch
+            e = DepartmentGroupEmail.objects.filter(graduation_year=batch).filter(id__in=ids).values('email')
+            
+            email_on = list(map(lambda x:x['email'], e ))
+
+
+            return render(request,'app/email_sender.html', {'offer':offer, 'email_list':email_list, 'email_on':email_on})
+        
+
+    else:
+        return redirect('dashboard')
 
 
 class CompanyListView(ListView):
@@ -322,8 +390,12 @@ def AddApplication(request, id):
 
     if is_elegible:
         Application.objects.create(student = student,offer = offer)
+        messages.info(request, 'Application Sent.')
+
         return redirect('my_applications')
     else:
+        messages.warning(request, 'Not Eligible.')
+
         return redirect('offer_details', pk=id)
 
 

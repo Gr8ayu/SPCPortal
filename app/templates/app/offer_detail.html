@@ -10,6 +10,14 @@
 <p>deadline: {{ object.deadline}}</p>
 <p> day left {{ object.date|timesince:object.deadline }}</p>
 
+<pre>
+    
+    {{object.note}}
+
+
+</pre>
+
+
 <p>eligible_branches:
     <ul>
         {% for branch in object.eligible_branches.all %}
@@ -23,6 +31,12 @@ Elegible : {{elegible}}
 
 {%if elegible%}
 <a href="{%url 'add_application' object.id%}">Apply</a>
+
+{%endif%}
+
+
+{%if user.is_admin%}
+<a href="{%url 'offer_alert' object.id%}">Send Email (Admin Only)</a>
 
 {%endif%}
 
