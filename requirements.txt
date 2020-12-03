@@ -1,4 +1,5 @@
 asgiref==3.2.10
+attrs==20.3.0
 certifi==2020.11.8
 cffi==1.14.3
 chardet==3.0.4
@@ -17,15 +18,21 @@ et-xmlfile==1.0.1
 Faker==0.9.1
 gunicorn==20.0.4
 idna==2.10
+iniconfig==1.1.1
 jdcal==1.4.1
 MarkupPy==1.14
 mixer==6.1.3
 oauthlib==3.1.0
 odfpy==1.4.1
 openpyxl==3.0.5
+packaging==20.7
 Pillow==8.0.1
+pluggy==0.13.1
+py==1.9.0
 pycparser==2.20
 PyJWT==1.7.1
+pyparsing==2.4.7
+pytest==6.1.2
 python-dateutil==2.8.1
 python3-openid==3.2.0
 pytz==2020.1
@@ -36,6 +43,7 @@ six==1.15.0
 sqlparse==0.3.1
 tablib==2.0.0
 text-unidecode==1.2
+toml==0.10.2
 urllib3==1.26.2
 xlrd==1.2.0
 xlwt==1.3.0
