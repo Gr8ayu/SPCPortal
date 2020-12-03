@@ -1,20 +1,71 @@
-{% extends 'app/base.html' %}
-{% block main %}
+
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock %}
+
+
+
+
+
 <div class="container">
+
+
+    <div>
+        {{student}}<br>
+        {{student.name}}<br>
+        {{student.USN}}<br>
+        {{student.gender}}<br>
+        {{student.date_of_birth}}<br>
+        {{student.profile_pic}}<br>
+        {%if student.resume%}
+            {{student.resume.url}}<br>
+        {%endif%}
+        {{student.is_elegible.url}}<br>
     
-    <div>
-        {{student}}
     </div>
+    <hr>
     <div>
-        {{user}}
+        {{user}}<br>
+        {{user.username}}<br>
+        {{user.email}}<br>
+        
     </div>
+    <hr>
     <div>
-        {{contact}}
+        {{contact}}<br>
+        {{contact.city}}<br>
+        {{contact.state}}<br>
+        {{contact.pin}}<br>
+        {{contact.mobile}}<br>
+        {{contact.alternate_mobile}}<br>
+        {{contact.email}}<br>
     </div>
+    <hr>
     <div>
-        {{education}}
+
+        {{education}}<br>
+        {{education.admission_mode}}<br>
+        {{education.department}}<br>
+        {{education.X_board}}<br>
+        {{education.XII_board}}<br>
+        {{education.X_percentage}}<br>
+        {{education.XII_percentage}}<br>
+        {{education.sem_1_sgpa}},
+        {{education.sem_2_sgpa}},
+        {{education.sem_3_sgpa}},
+        {{education.sem_4_sgpa}},
+        {{education.sem_5_sgpa}},
+        {{education.sem_6_sgpa}},
+        {{education.sem_7_sgpa}},
+        
+        {{education.sem_8_sgpa}},
+        {{education.cgpa}}<br>
+        {{education.graduation_year}}<br>
+        {{education.sem_8_sgpa}}<br>
+        
+
     </div>
 
 
 </div>   
-{% endblock %}

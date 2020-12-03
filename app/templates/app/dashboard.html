@@ -1,0 +1,27 @@
+
+
+{% extends 'app/base.html' %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock %}
+
+
+
+
+{% block main %}
+
+    {% if user.is_student %}
+        {% include "app/student_dashboard.html" %}
+    {%endif%}
+
+    {% if user.is_teacher %}
+        {% include "app/teacher_dashboard.html" %}
+    {%endif%}
+
+    {% if user.is_admin %}
+        {% include "app/admin_dashboard.html" %}
+    {%endif%}
+
+
+{% endblock %}

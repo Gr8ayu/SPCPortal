@@ -29,12 +29,15 @@ from django.views.generic.detail import DetailView
 import datetime
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.db.models import Avg, Max, Min, Sum
+from app.analytics import pie_dream_open_offer, pie_branch_offer
+from django.db.models.functions import Coalesce
 
 def home(request):
     return render(request, 'app/home.html')
 
 @login_required
-def student_dashboard(request):
+def dashboard(request):
     user = request.user
     student = request.user.student
     contact = student.contact
@@ -46,8 +49,20 @@ def student_dashboard(request):
     context['contact'] = contact
     context['education'] = education
 
+    # test = Offer.objects.all() \
+    # .values('offer_type') \
+    # .annotate(package = Sum('package'))
 
-    return render(request, 'app/student_dashboard.html', context=context)
+    # print(test)
+
+    context['analytics'] = {}
+
+
+    context['analytics']['chart1'] = pie_dream_open_offer()
+    context['analytics']['chart2'] = pie_branch_offer()
+    # print(">>>>>>>>>>>>",context['test_data'])
+
+    return render(request, 'app/dashboard.html', context=context)
 
 
 
@@ -185,7 +200,7 @@ def CheckElegibleForApplication(student, offer):
         errors.append("XII / Diploma percentage Cutoff requirement not met.")
 
 
-    if student.gender not in offer.eligible_gender or "OTHER" in offer.eligible_gender:
+    if student.gender not in offer.eligible_gender and "OTHER" not in offer.eligible_gender:
         is_elegible = False
         errors.append("your Gender is not elegible")
 

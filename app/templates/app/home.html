@@ -77,7 +77,11 @@
           <li><a href="#services">Facilities</a></li>
           <li><a href="#team">Team</a></li>
           <li><a href="#contact">Contact</a></li>
-
+          {%if user.is_authenticated%}
+            <li><a href="{%url 'dashboard'%}">Dashboard</a></li>
+          {%else%}
+            <li><a href="{%url 'account_login'%}">Login</a></li>
+          {%endif%}
         </ul>
       </nav><!-- .nav-menu -->
 

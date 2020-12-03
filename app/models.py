@@ -1,7 +1,8 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 import datetime
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 # TODO update this department list
@@ -24,6 +25,23 @@ GENDER = (
 
     )
 
+USER_TYPE = (
+        ('STUDENT', 'STUDENT'),
+        ('TEACHER', 'TEACHER'),
+        ('ADMIN', 'ADMIN')
+
+    )
+
+class User(AbstractUser):
+    user_type = models.CharField(max_length=10, choices=USER_TYPE, default="STUDENT")
+
+    def is_student(self):
+        return self.user_type == 'STUDENT'
+    def is_teacher(self):
+        return self.user_type == 'TEACHER'
+    def is_admin(self):
+        return self.user_type == 'ADMIN'
+
 
 class Department(models.Model):
     name = models.CharField(max_length=50 )
@@ -34,8 +52,9 @@ class Department(models.Model):
         return self.name
 
 class Student(models.Model):
+
     user = models.OneToOneField(User, on_delete =models.CASCADE, related_name='student' )
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100)
     USN = models.CharField(max_length=20,  null=True)
     gender = models.CharField(max_length=10, choices=GENDER, blank=True )
     date_of_birth = models.DateField(default=datetime.datetime.today)
@@ -47,7 +66,7 @@ class Student(models.Model):
     # TODO add more feilds later
 
     def __str__(self):
-        return self.user.username
+        return str(self.name) +" (" + self.user.email + ")"
 
     def is_placed(self):
         applications  = Application.objects.filter(student=self, status='ACCEPTED', offer__offer_type='OPEN')
@@ -58,18 +77,21 @@ class Student(models.Model):
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
+    pass
     if created:
         Student.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     if not instance.student:
+        pass
         Student.objects.create(user=instance)
     instance.student.save()
 
 @receiver(post_save, sender=Student)
 def create_edu_contact(sender, instance, created, **kwargs):
     if created:
+        pass
         Contact.objects.create(user=instance)
         Education.objects.create(user=instance)
 
@@ -97,7 +119,7 @@ class Contact(models.Model):
     email = models.EmailField(blank=True, null =True)
 
     def __str__(self):
-        return self.user.name
+        return str(self.user)
 
 class  Education(models.Model):
     MODE  = (
@@ -123,9 +145,11 @@ class  Education(models.Model):
     sem_8_sgpa = models.FloatField(null = True, blank = True, default = 0)
     cgpa = models.FloatField(null = True, blank = True, default = 0)
     graduation_year = models.IntegerField(default = datetime.datetime.now().year)
-    
+    #TODO add backlog details, sem
+
+
     def __str__(self):
-        return self.user.name
+        return str(self.user)
 
 class Company(models.Model):
     name = models.CharField(max_length=100)
@@ -169,6 +193,8 @@ class Offer(models.Model):
     def __str__(self):
         return self.company.name
 
+    def accepted(self):
+        return Application.objects.filter(offer=self).filter(status="ACCEPTED").count()
 
 class Application(models.Model):
     STATUS = (
@@ -180,7 +206,7 @@ class Application(models.Model):
         ('OTHER','OTHER'),
         )
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="applications")
     status = models.CharField(max_length=10, choices=STATUS, default='PROCESSING')
     
     def __str__(self):

@@ -5,6 +5,23 @@ from app.models import *
 from import_export import resources
 
 from import_export.admin import ImportExportModelAdmin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm
+
+class MyUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = User
+
+class MyUserAdmin(UserAdmin):
+    form = MyUserChangeForm
+
+    fieldsets = UserAdmin.fieldsets + (
+            (None, {'fields': ('user_type',)}),
+    )
+    
+
+
+admin.site.register(User, MyUserAdmin)
 
 
 class DepartmentAdmin(ImportExportModelAdmin):
@@ -15,8 +32,8 @@ class DepartmentAdmin(ImportExportModelAdmin):
 @admin.register(Offer)
 class OfferAdmin(ImportExportModelAdmin):
 
-    list_display = ('company', 'deadline', 'offer_type','required_batch')
-    list_filter = ('offer_type','required_batch','company')
+    list_display = ('company', 'deadline', 'offer_type','category','required_batch')
+    list_filter = ('offer_type','required_batch','category','eligible_gender')
     search_fields = ('company__name', 'note')
     
 @admin.register(Application)
@@ -35,19 +52,4 @@ admin.site.register(Student)
 admin.site.register(Company)
 admin.site.register(Contact)
 admin.site.register(Education)
-# admin.site.register(Offer)
 admin.site.register(SPC)
-# admin.site.register(Application)
-
-
-# @admin.register(Subscription)
-# class SubscriptionAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'is_subscribed', 'valid_till')
-#     # list_filter = ('is_subscribed',)
-#     search_fields = ('user',)
-#     actions = ['subscribe_30_days']
-
-#     def subscribe_30_days(self, request, queryset):
-#         dt = datetime.date.today() + datetime.timedelta(days=30)
-#         queryset.update(valid_till=dt)
-

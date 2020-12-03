@@ -1,0 +1,110 @@
+    
+    <div>
+
+        {%if user.is_teacher%}
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="chart1"></canvas>
+        </div>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="chart2"></canvas>
+        </div>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="chart3"></canvas>
+        </div>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="chart4"></canvas>
+        </div>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="chart5"></canvas>
+        </div>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:30vw">
+            <canvas id="chart6"></canvas>
+        </div>
+
+
+
+        {%endif%}
+
+
+
+        <script >
+            var test = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(test, {
+                // The type of chart we want to create
+                type: 'line',
+
+                // The data for our dataset
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [{
+                        label: 'My First dataset',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [0, 10, 5, 2, 20, 30, 45]
+                    }]
+                },
+
+                // Configuration options go here
+                options: {}
+            });
+
+
+            var chart1 = document.getElementById('chart1').getContext('2d');
+
+             chart_1_data = {
+                datasets: [ {{analytics.chart1.dataset|safe}} ],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: {{analytics.chart1.dataset.labels|safe}}
+            };
+
+            var myPieChart = new Chart(chart1, {
+                type: 'pie',
+                data: chart_1_data,
+                options: {{analytics.chart1.options|safe}}
+            });
+
+
+             var chart_2_data = {
+                datasets: [ {{analytics.chart2.dataset|safe}} ],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: {{analytics.chart2.dataset.labels|safe}}
+            };
+
+
+            var chart2 = document.getElementById('chart2').getContext('2d');
+            // And for a doughnut chart
+            var myDoughnutChart = new Chart(chart2, {
+                type: 'doughnut',
+                data: chart_2_data,
+                options: {{analytics.chart2.options|safe}}
+            });
+
+
+
+
+            var chart3 = document.getElementById('chart3').getContext('2d');
+            // And for a doughnut chart
+            var myBarChart = new Chart(chart3, {
+                type: 'bar',
+                data: chart_2_data,
+                options: {{analytics.chart2.options|safe}}
+            });
+
+
+
+
+
+        </script>
+    </div>
