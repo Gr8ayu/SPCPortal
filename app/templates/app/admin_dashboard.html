@@ -1,1 +1,87 @@
-<h1>ADMIN</h1>
+    
+    <div>
+
+        {%if user.is_teacher%}
+
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- <div class="chart-container col-sm-12 col-md-3 col-lg-3" style="position: relative; height:40vh; width:30vw"> -->
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6" >
+                    <canvas id="chart1"></canvas>
+                </div>
+
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6" >
+                    <canvas id="chart2"></canvas>
+                </div>
+
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6" >
+                    <canvas id="chart3"></canvas>
+                </div>
+
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6" >
+                    <canvas id="chart4"></canvas>
+                </div>
+
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6" >
+                    <canvas id="chart5"></canvas>
+                </div>
+
+                <div class="chart-container col-sm-12 col-md-6 col-lg-6" >
+                    <canvas id="chart6"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+
+        {%endif%}
+
+
+
+        <script >
+            var test = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(test, {
+                // The type of chart we want to create
+                type: 'line',
+
+                // The data for our dataset
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [{
+                        label: 'My First dataset',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [0, 10, 5, 2, 20, 30, 45]
+                    }]
+                },
+
+                // Configuration options go here
+                options: {}
+            });
+
+
+            var chart1 = document.getElementById('chart1').getContext('2d');
+            var chart2 = document.getElementById('chart2').getContext('2d');
+            var chart3 = document.getElementById('chart3').getContext('2d');
+            var chart4 = document.getElementById('chart4').getContext('2d');
+            var chart5 = document.getElementById('chart5').getContext('2d');
+            
+
+
+            var myPieChart1 = new Chart(chart1, {{analytics.chart1|safe}} );
+            var myPieChart2 = new Chart(chart2, {{analytics.chart2|safe}} );
+            var myPieChart3 = new Chart(chart3, {{analytics.chart3|safe}} );
+            var myPieChart4 = new Chart(chart4, {{analytics.chart4|safe}} );
+            var myPieChart5 = new Chart(chart5, {{analytics.chart5|safe}} );
+            
+
+
+
+
+        </script>
+    </div>

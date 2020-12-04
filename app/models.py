@@ -58,7 +58,7 @@ class Student(models.Model):
     USN = models.CharField(max_length=20,  null=True)
     gender = models.CharField(max_length=10, choices=GENDER, blank=True )
     date_of_birth = models.DateField(default=datetime.datetime.today)
-    profile_pic = models.ImageField(upload_to='profile_pic', default='default_pic.png') 
+    profile_pic = models.ImageField(upload_to='profile_pic', default='profile_pic/default_pic.png') 
     resume = models.FileField(upload_to='resume', blank=True, null=True) 
     is_eligible = models.BooleanField(default=True)
 
@@ -145,17 +145,34 @@ class  Education(models.Model):
     sem_8_sgpa = models.FloatField(null = True, blank = True, default = 0)
     cgpa = models.FloatField(null = True, blank = True, default = 0)
     graduation_year = models.IntegerField(default = datetime.datetime.now().year)
-    #TODO add backlog details, sem
+    #TODO add backlog details, sem, bio, comedk rank
 
 
     def __str__(self):
         return str(self.user)
 
 class Company(models.Model):
+    COMPANY_CATEGORY = (
+            ('Business Analytics','Business Analytics'),
+            ('Communication and Engineering','Communication and Engineering'),
+            ('Construction and Engineering','Construction and Engineering'),
+            ('Consultancy','Consultancy'),
+            ('Global Fianance Service','Global Fianance Service'),
+            ('Health Care Division','Health Care Division'),
+            ('R & D Division','R & D Division'),
+            ('R & D Media and Mobile Applications','R & D Media and Mobile Applications'),
+            ('Supply Chain Management','Supply Chain Management'),
+            ('Production and Manufacturing','Production and Manufacturing'),
+            ('Other','Other'),
+        )
+
+
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     website = models.URLField(blank=True)
-    logo = models.ImageField(upload_to="company_logo", blank=True)
+    logo = models.ImageField(upload_to="company_logo",default='company_logo/default.png' )
+    category = models.CharField(max_length=40, choices=COMPANY_CATEGORY, default='Other')
+    
     def __str__(self):
         return self.name
 

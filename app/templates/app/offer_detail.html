@@ -1,50 +1,163 @@
 {% extends 'app/base.html' %}
-
 {% block main %}
+<style>
+    body{
+    color: #8e9194;
+    background-color: #f4f6f9;
+}
+.avatar-xl img {
+    width: 110px;
+}
+.rounded-circle {
+    border-radius: 50% !important;
+}
+img {
+    vertical-align: middle;
+    border-style: none;
+}
+.text-muted {
+    color: #aeb0b4 !important;
+}
+.text-muted {
+    font-weight: 300;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #4d5154;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #eef0f3;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+</style>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8 mx-auto">
+            <h2 class="h3 mb-4 page-title"></h2>
+            <div class="my-4">
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false"></a>
+                    </li>
+                </ul>
+                <form>
+                    <div class="row mt-5 align-items-center">
+                        <div class="col-md-3 text-center mb-5">
+                            <div class="avatar avatar-xl">
+                                <img src="{{object.company.logo.url}}" alt="..." class="avatar-img rounded-circle" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row align-items-center">
+                                <div class="col-md-7">
+                                    <h4 class="mb-1">{{object.company}}</h4>
+                                    <p class="small mb-3"><span class="badge badge-dark">{{object.company.category}}</span></p>
+                                </div>
+                            </div>
+                            <div class="row mb-12">
+                                <div class="col-md-12">
+                                    <p class="">
+                                        {{object.company.description}}
+                                    </p>
+                                </div>
+                               
+                            </div>
+
+                        </div>
+                    </div>
+                            {%if elegible%}
+                            
+                           <a href="{%url 'add_application' object.id%}"> <div class="btn btn-primary">Apply</div></a>
+                            {%else%}
+                            <ul>
+
+                                {% for e in elegiblity_reasons %}
+                                <li style="color:red"> {{e}}</li>
+                                
+                                
+                                {%endfor%}
+                                
+                            </ul>
+
+                            {%endif%}
+                            {%if user.is_admin%}
+                            
+                           <a href="{%url 'offer_alert' object.id%}"> <div class="btn btn-info">Send Email (Admin Only)</div></a>
+
+                            {%endif%}
+                    <hr class="my-4" />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="firstname">Date</label>
+                            <input type="text" id="firstname" class="form-control" value="{{object.date | date}}" disabled />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastname">Deadline</label>
+                            <input type="text" id="lastname" class="form-control" value="{{object.deadline }}" disabled />
+                            <small style="color:red">{{ now|timesince:object.deadline }} left</small>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastname">Offer Type</label>
+                            <input type="text" id="lastname" class="form-control" value="{{object.offer_type}}" disabled />
+                            
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastname">Category</label>
+                            <input type="text" id="lastname" class="form-control" value="{{object.category}}" disabled />
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail4">Eligible Branches</label>
+                        {% for b in object.eligible_branches.all %}
+                        <input type="email" id="inputEmail4" class="form-control" value="{{b}}" disabled />
+                        {%endfor%}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAddress5">Elegible Gender</label>
+                        <input type="text" id="inputAddress5" value="{{object.eligible_gender}} 
+                        " class="form-control" disabled />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="inputCompany5">Package</label>
+                            <input type="text" class="form-control" id="inputCompany5" value="{{object.package}}" disabled />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputCompany5">CGPA Cutoff</label>
+                            <input type="text" class="form-control" id="inputCompany5" value="{{object.cgpa_cutoff}}" disabled />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputZip5">X Cutoff %age</label>
+                            <input type="text" class="form-control" id="inputZip5" value="{{object.X_cutoff}}" disabled/>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="inputZip5">XII Cutoff %age</label>
+                            <input type="text" class="form-control" id="inputZip5" value="{{object.XII_cutoff}}" disabled/>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-
-<h1>{{ object }}</h1>
-<p>offer : {{ object.offer }}</p>
-<p>date: {{ object.date }}</p>
-<p>deadline: {{ object.deadline}}</p>
-<p> day left {{ object.date|timesince:object.deadline }}</p>
 
 <pre>
-    
+
     {{object.note}}
 
 
 </pre>
 
-
-<p>eligible_branches:
-    <ul>
-        {% for branch in object.eligible_branches.all %}
-        <li>{{ branch }}</li>
-        {% endfor %}
-    </ul>
-
-
-
-Elegible : {{elegible}}
-
-{%if elegible%}
-<a href="{%url 'add_application' object.id%}">Apply</a>
-
-{%endif%}
-
-
-{%if user.is_admin%}
-<a href="{%url 'offer_alert' object.id%}">Send Email (Admin Only)</a>
-
-{%endif%}
-
-
-<br>
-
-{% for e in elegiblity_reasons %}
-{{e}}
-<br>
-{%endfor%}
-{%endblock%}
+    {%endblock%}

@@ -15,20 +15,59 @@
 </form>
 <h1>Offers</h1>
 <ul>
+
+<div class="container">
+
 {% for offer in object_list %}
     <!-- <li>{{ article.pub_date|date }} - {{ article.headline }}</li> -->
-    <li><a href="{%url 'offer_details' offer.id %}">{{offer}}</a>
-
-        <p>
-            {{offer.category }},
-            {{offer.offer_type }}
-        </p>
-    </li>
+         <div class="card mt-3 border-5 pt-2 active pb-0 px-3">
+         <div class="card-body ">
+             <div class="row">
+                 <div class="col-12 ">
+                     <h4 class="card-title "><b><a href="{%url 'offer_details' offer.id %}">{{offer.company}}</a></b></h4>
+                 </div>
+                 <div class="col">
+                     <h6 class="card-subtitle mb-2 text-muted">
+                         <p class="card-text text-muted small "> <img src="https://img.icons8.com/metro/26/000000/star.png" class="mr-1 " width="19" height="19" id="star"> <span class="vl mr-2 ml-0"></span> {{offer.company.description|truncatewords:15}} <span class="font-weight-bold"> BBBootstrap Team</span> on 1 Nov , 2018</p>
+                     </h6>
+                 </div>
+             </div>
+         </div>
+         <div class="card-footer bg-white px-0 ">
+             <div class="row">
+                 <div class=" col-md-auto "> <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s"><img src="https://img.icons8.com/ios/50/000000/settings.png" width="19" height="19"> <small>{{ offer.deadline | date }}</small></a> <i class="mdi mdi-settings-outline"></i> <a href="#" class=" btn-outlined btn-black text-muted"><img src="https://img.icons8.com/metro/26/000000/link.png" width="17" height="17" id="plus"> <small>{{offer.offer_type}}</small> </a> <a href="#" class="btn btn-outlined btn-black text-muted "><img src="https://img.icons8.com/metro/26/000000/more.png" width="20" height="20" class="mr-2 more"><small>{{offer.category}}</small></a> <span class="vl ml-3"></span> </div>
+                 <div class="col-md-auto ">
+                     <ul class="list-inline">
+                         <li class="list-inline-item"> <img src="{{offer.company.logo.url}}" alt="DP" class=" rounded-circle img-fluid " width="35" height="35"> </li>
+                         
+                     </ul>
+                 </div>
+             </div>
+         </div>
+     </div>
 
 {% empty %}
     <li>No offers yet.</li>
 {% endfor %}
 </ul>
+
+ 
+   
+
+   
+ </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% block pagination %}
     {% if is_paginated %}

@@ -17,10 +17,10 @@
             <div class="row people">
                 {% for company in object_list %}
                     <div class="col-md-6 col-lg-4 item">
-                        <div class="box"><img class="rounded-circle" src="https://www.101dogbreeds.com/wp-content/uploads/2016/04/Medium-Sized-Dog-Breeds.jpg">
+                        <div class="box"><img class="rounded-circle" src="{{company.logo.url}}">
                             <h3 class="name"><a href="{%url 'company_details' company.id %}">{{company}}</a></h3>
-                            <p class="title">Stylist</p>
-                            <p class="description">{{company.description}} </p>
+                            <p class="title">{{company.category}}</p>
+                            <p class="description">{{company.description|truncatewords:20}} </p>
                             <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
                         </div>
                     </div>
