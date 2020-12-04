@@ -18,14 +18,25 @@ services:
     image: nginx:1.13
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - static_volume:/code/staticfiles  # <-- bind the static volume
       - media_volume:/code/media
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - spcportal
     networks:
       - nginx_network
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   postgres:  # <-- IMPORTANT: same name as in DATABASES setting, otherwise Django won't find the database!
     image: postgres:10
