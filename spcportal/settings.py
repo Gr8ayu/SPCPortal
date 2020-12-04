@@ -26,7 +26,7 @@ SECRET_KEY = 'lr^^&mqx8*8pluolw94jl^fu)cd7#e%kycezk!0t6h=h3sinag'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','rvians.online','34.72.197.163']
+ALLOWED_HOSTS = ['127.0.0.1','rvians.online','www.rvians.online','34.72.197.163']
 
 
 # Application definition
