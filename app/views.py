@@ -31,12 +31,12 @@ import datetime
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.db.models import Avg, Max, Min, Sum
-from app.analytics import pie_dream_open_offer, pie_branch_offer
+from app.analytics import *
 from django.db.models.functions import Coalesce
 from django.template.loader import render_to_string
 from django.core import mail
 from django.utils.html import strip_tags
-
+from django.utils.timezone import utc
 
 def home(request):
 
@@ -46,12 +46,7 @@ def home(request):
 @login_required
 def dashboard(request):
 
-    # # messages.debug(request, 'debug %s SQL statements were executed.' % 5)
-    # messages.info(request, 'info Three credits remain in your account.')
-    # # messages.success(request, 'success Profile details updated.')
-    # # messages.warning(request, 'warning Your account expires in three days.')
-    # # messages.error(request, 'error Document deleted.')
-    
+
     user = request.user
     student = request.user.student
     contact = student.contact
@@ -63,18 +58,15 @@ def dashboard(request):
     context['contact'] = contact
     context['education'] = education
 
-    # test = Offer.objects.all() \
-    # .values('offer_type') \
-    # .annotate(package = Sum('package'))
-
-    # print(test)
-
     context['analytics'] = {}
 
 
-    context['analytics']['chart1'] = pie_dream_open_offer()
-    context['analytics']['chart2'] = pie_branch_offer()
-    # print(">>>>>>>>>>>>",context['test_data'])
+    context['analytics']['chart1'] = pie_branch_offer()
+    context['analytics']['chart2'] = pie_dream_open_offer()
+    context['analytics']['chart3'] = department_wise_yearly_stats(2)
+    context['analytics']['chart4'] = pie_dream_open_offer()
+    context['analytics']['chart5'] = pie_dream_open_offer()
+    
 
     return render(request, 'app/dashboard.html', context=context)
 
@@ -87,11 +79,6 @@ def dashboard(request):
 def edit_profile(request):
 
     user = request.user.student
-    # user = Student.objects.get(user=user)
-
-
-    # c = Contact.objects.get(user=user)
-    # e = Education.objects.get(user=user)
 
     c = user.contact
     e = user.education
@@ -119,9 +106,11 @@ def edit_contact_details(request):
             error = "Successfully saved"
             messages.success(request, 'Contact details Updated.')
         else:
-            for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
-
+            # for msg in form.error_messages:
+            #     messages.error(request, f"{msg}: {form.error_messages[msg]}")
+            for field, items in form.errors.items():
+                for item in items:
+                    messages.error(request, '{}: {}'.format(field, item))
         # form.user = request.user.student 
         
         return redirect('dashboard')
@@ -145,9 +134,9 @@ def edit_education_details(request):
             messages.success(request, 'Education details Updated.')
             
         else:
-            for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
-
+            for field, items in form.errors.items():
+                for item in items:
+                    messages.error(request, '{}: {}'.format(field, item))
         return redirect('dashboard')
 
 
@@ -169,9 +158,9 @@ def edit_profile_details(request):
             messages.success(request, 'Profile Updated.')
             
         else:
-            for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
-
+            for field, items in form.errors.items():
+                for item in items:
+                    messages.error(request, '{}: {}'.format(field, item))
         return redirect('dashboard')
 
 
@@ -284,7 +273,8 @@ class OfferDetailView(DetailView):
         
         is_elegible, errors = CheckElegibleForApplication(student, offer)
 
-
+        context['now'] = datetime.datetime.utcnow().replace(tzinfo=utc)
+        # TODO make local time
         context['elegible'] = is_elegible
 
         if is_elegible:
