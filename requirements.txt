@@ -3,6 +3,7 @@ attrs==20.3.0
 certifi==2020.11.8
 cffi==1.14.3
 chardet==3.0.4
+coverage==5.3
 cryptography==3.2.1
 defusedxml==0.6.0
 diff-match-patch==20200713
@@ -16,6 +17,7 @@ django-pwa==1.0.10
 django-sslserver==0.22
 et-xmlfile==1.0.1
 Faker==0.9.1
+graphviz==0.15
 gunicorn==20.0.4
 idna==2.10
 iniconfig==1.1.1
@@ -30,9 +32,12 @@ Pillow==8.0.1
 pluggy==0.13.1
 py==1.9.0
 pycparser==2.20
+pydotplus==2.0.2
 PyJWT==1.7.1
 pyparsing==2.4.7
 pytest==6.1.2
+pytest-cov==2.10.1
+pytest-django==4.1.0
 python-dateutil==2.8.1
 python-dotenv==0.15.0
 python3-openid==3.2.0
@@ -46,5 +51,6 @@ tablib==2.0.0
 text-unidecode==1.2
 toml==0.10.2
 urllib3==1.26.2
+Werkzeug==1.0.1
 xlrd==1.2.0
 xlwt==1.3.0
