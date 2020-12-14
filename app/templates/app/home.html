@@ -39,6 +39,7 @@
   <link href="{%static "app/vendor/venobox/venobox.css"%} " rel="stylesheet">
   <link href="{%static "app/vendor/owl.carousel/owl.carousel.min.css"%} " rel="stylesheet">
   <link href="{%static "app/vendor/aos/aos.css"%} " rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
   <link href="{%static "app/css/style-landing.css"%} " rel="stylesheet">
 
@@ -452,9 +453,66 @@
   <script src="{%static "app/vendor/venobox/venobox.min.js"%} "></script>
   <script src="{%static "app/vendor/owl.carousel/owl.carousel.min.js"%} "></script>
   <script src="{%static "app/vendor/aos/aos.js"%} "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="{%static "app/js/main.js"%}"></script>
+ <script >
+    toastr.options.closeButton = true;
+    toastr.options.closeMethod = 'fadeOut';
+    toastr.options.closeDuration = 300;
+    toastr.options.closeEasing = 'swing';
+    toastr.options.progressBar = true;
+    toastr.options.timeOut = 10000; // How long the toast will display without user interaction
+    toastr.options.extendedTimeOut = 3000; // How long the toast will display after a user hovers over it
+    toastr.options.showMethod = 'slideDown';
+    toastr.options.hideMethod = 'slideUp';
+    toastr.options.closeMethod = 'slideUp';
+
+
+
+  </script>
+     <script>
+                    // $(document).load(function(){
+
+
+                    {% if messages %}
+                        {% for message in messages %}
+                          // alert("{{message}}");
+
+                          {%if message.level == 40 %}
+
+                            toastr.error('{{message}}', '{{message}}'  )
+
+                          {%endif%}
+                          {%if message.level == 30 %}
+
+                            toastr.warning('{{message}}', '{{message}}'  )
+
+                          {%endif%}
+                          {%if message.level == 25 %}
+
+                            toastr.success('{{message}}', '{{message}}'  )
+
+                          {%endif%}
+                          {%if message.level == 20 %}
+
+                            toastr.info('{{message}}', '{{message}}'  )
+
+                          {%endif%}
+
+                           
+
+
+
+                        {% endfor %}
+                    {% endif %}
+
+                      
+                    // });
+
+
+                  </script>
 
 </body>
 

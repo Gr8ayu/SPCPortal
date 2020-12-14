@@ -4,10 +4,6 @@ from app import views
 from django.contrib.auth.decorators import login_required
 
 
-def temp(request):
-    return HttpResponse('temp')
-
-
 urlpatterns = [
     
 

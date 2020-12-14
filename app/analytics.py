@@ -183,7 +183,7 @@ def department_wise_yearly_stats(dept):
 
 
 
-def offers_by_companies_count(*args):
+# def offers_by_companies_count(*args):
     
     # Department wise offers made 
     # Application.objects.filter(status="ACCEPTED").values('student__education__department').annotate(count = Count('id'))
@@ -215,13 +215,13 @@ def offers_by_companies_count(*args):
 
 
 
-    pass
+#     pass
 
 
-def emails():
-    Offer.objects.all()[6].eligible_branches.all().values('id')
-    Offer.objects.all()[6].required_batch
-    list(map(lambda x:x['id'], branches ))
-    DepartmentGroupEmail.objects.filter(graduation_year=2022).filter(id__in=blist).values('email')
+# def emails():
+#     Offer.objects.all()[6].eligible_branches.all().values('id')
+#     Offer.objects.all()[6].required_batch
+#     list(map(lambda x:x['id'], branches ))
+#     DepartmentGroupEmail.objects.filter(graduation_year=2022).filter(id__in=blist).values('email')
     
-    list(map(lambda x:x['email'], e ))
+#     list(map(lambda x:x['email'], e ))

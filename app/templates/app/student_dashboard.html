@@ -407,7 +407,7 @@ ul.summary-list > li:last-child  {
      
       <div class="panel">
           <div class="bio-graph-heading">
-              Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
+              {{education.bio}}
           </div>
           <div class="panel-body bio-graph-info">
               <h1></h1>
@@ -453,7 +453,7 @@ ul.summary-list > li:last-child  {
                           </div>
                           <div class="bio-desk">
                               <h4 class="red">{{education.admission_mode}}</h4>
-                              <p>Rank : {{education.rank}}</p>
+                              <p>Rank : {{education.admission_mode_rank}}</p>
                               <p>Department : {{education.department}}</p>
                           </div>
                       </div>
@@ -466,8 +466,8 @@ ul.summary-list > li:last-child  {
                               <!-- <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="63" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div> -->
                           </div>
                           <div class="bio-desk">
-                              <h4 class="terques">{{education.X_board}} </h4>
-                              <p>Percentage : {{education.X_percentage}}</p>
+                              <h4 class="terques">X Board : {{education.X_board}} </h4>
+                              <p>X Percentage : {{education.X_percentage}}</p>
                               <!-- <p>Deadline : 15 August</p> -->
                           </div>
                       </div>
@@ -480,8 +480,8 @@ ul.summary-list > li:last-child  {
                               <!-- <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="75" data-fgcolor="#96be4b" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(150, 190, 75); padding: 0px; -webkit-appearance: none; background: none;"></div> -->
                           </div>
                           <div class="bio-desk">
-                              <h4 class="green">{{education.XII_board}}</h4>
-                              <p>Percentage : {{education.XII_percentage}}</p>
+                              <h4 class="green">XII Board : {{education.XII_board}}</h4>
+                              <p>XII Percentage : {{education.XII_percentage}}</p>
                           </div>
                       </div>
                   </div>
@@ -493,6 +493,7 @@ ul.summary-list > li:last-child  {
                               <!-- <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="50" data-fgcolor="#cba4db" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(203, 164, 219); padding: 0px; -webkit-appearance: none; background: none;"></div> -->
                           </div>
                           <div class="bio-desk">
+                              <h4 class="red">Backlogs : {{education.no_of_backlogs}} </h4>
                               <h4 class="purple">CGPA : {{education.cgpa}} </h4>
                               <p>Sem 1 SGPA : {{education.sem_1_sgpa}}</p>
                               <p>Sem 2 SGPA : {{education.sem_2_sgpa}}</p>

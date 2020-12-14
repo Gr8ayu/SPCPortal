@@ -39,6 +39,9 @@ class User(AbstractUser):
         return self.user_type == 'STUDENT'
     def is_teacher(self):
         return self.user_type == 'TEACHER'
+    def is_admin_access(self):
+        return self.user_type == 'ADMIN'
+
     def is_admin(self):
         return self.user_type == 'ADMIN'
 
@@ -128,8 +131,12 @@ class  Education(models.Model):
             ("COMEDK", "COMEDK" )
         )
     user = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='education' )
+    bio = models.TextField(blank=True)
+    sem = models.IntegerField( default=1)
+
     admission_mode = models.CharField(max_length=10, choices=MODE, default='COMEDK')
-    # department = models.CharField(max_length=20, choices=DEPARTMENTS )
+    admission_mode_rank = models.IntegerField( null=True, blank=True)
+    no_of_backlogs = models.IntegerField(default=0)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True )
     X_board = models.CharField(max_length=20, help_text="10th Board name", blank=True )
     XII_board = models.CharField(max_length=20, help_text="12th/Diploma Board name", blank=True  )
@@ -202,6 +209,7 @@ class Offer(models.Model):
     cgpa_cutoff = models.FloatField(default=0)
     X_cutoff = models.FloatField(default=0)
     XII_cutoff = models.FloatField(help_text="12th/Diploma cutoff percentage", default=0)
+    max_backlog = models.IntegerField(default=0)
     # diploma_cutoff = models.FloatField(default=0)
 
     def __str__(self):

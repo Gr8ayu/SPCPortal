@@ -37,6 +37,9 @@ from django.template.loader import render_to_string
 from django.core import mail
 from django.utils.html import strip_tags
 from django.utils.timezone import utc
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.http import HttpResponse
 
 def home(request):
 
@@ -114,7 +117,8 @@ def edit_contact_details(request):
         # form.user = request.user.student 
         
         return redirect('dashboard')
-
+    else:
+        return HttpResponse(status=405)
 
 @login_required 
 def edit_education_details(request):
@@ -138,7 +142,8 @@ def edit_education_details(request):
                 for item in items:
                     messages.error(request, '{}: {}'.format(field, item))
         return redirect('dashboard')
-
+    else:
+        return HttpResponse(status=405)
 
 @login_required 
 def edit_profile_details(request):
@@ -163,6 +168,8 @@ def edit_profile_details(request):
                     messages.error(request, '{}: {}'.format(field, item))
         return redirect('dashboard')
 
+    else :
+        return HttpResponse(status=405)
 
 def CheckElegibleForApplication(student, offer):
 
@@ -290,8 +297,10 @@ class OfferDetailView(DetailView):
 
 @login_required
 def sendOfferAlert(request, pk):
-    if request.user.is_admin :
+    if request.user.is_admin_access() :
 
+        domain = get_object_or_404(Site, pk=settings.SITE_ID).domain
+        domain = "https://" + domain
         if request.method == 'POST':
             offer = get_object_or_404(Offer, pk=pk)
             
@@ -299,9 +308,10 @@ def sendOfferAlert(request, pk):
             to = request.POST.getlist('email_list')
             to = list(to)
 
-            print(to)
+            
+
             from_email = os.getenv('DEFAULT_FROM_EMAIL')
-            html_message = render_to_string('app/offer_email_template.html', { 'offer':offer})
+            html_message = render_to_string('app/offer_email_template.html', { 'offer':offer,'domain_name':domain})
             plain_message = strip_tags(html_message)
             
             status = mail.send_mail(subject, plain_message, from_email, to, html_message=html_message)
@@ -326,7 +336,12 @@ def sendOfferAlert(request, pk):
             email_on = list(map(lambda x:x['email'], e ))
 
 
-            return render(request,'app/email_sender.html', {'offer':offer, 'email_list':email_list, 'email_on':email_on})
+            return render(request,'app/email_sender.html', {
+                                                        'offer':offer, 
+                                                        'email_list':email_list,
+                                                        'email_on':email_on,
+                                                        'domain_name':domain
+                                                        })
         
 
     else:
