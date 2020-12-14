@@ -30,6 +30,7 @@ openpyxl==3.0.5
 packaging==20.7
 Pillow==8.0.1
 pluggy==0.13.1
+psycopg2==2.8.6
 py==1.9.0
 pycparser==2.20
 pydotplus==2.0.2
