@@ -216,7 +216,9 @@ def CheckElegibleForApplication(student, offer):
         is_elegible = False
         errors.append("your Gender is not elegible")
 
-    
+    if offer.bio_keyword not in student.education.bio:
+        is_elegible = False
+        errors.append("You don't have match profile for "+offer.bio_keyword)
 
     return is_elegible, errors
     

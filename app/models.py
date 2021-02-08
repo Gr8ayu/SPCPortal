@@ -210,6 +210,7 @@ class Offer(models.Model):
     X_cutoff = models.FloatField(default=0)
     XII_cutoff = models.FloatField(help_text="12th/Diploma cutoff percentage", default=0)
     max_backlog = models.IntegerField(default=0)
+    bio_keyword = models.CharField(max_length=30, blank=True)
     # diploma_cutoff = models.FloatField(default=0)
 
     def __str__(self):
