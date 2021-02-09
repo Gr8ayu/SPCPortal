@@ -1,6 +1,8 @@
 version: '3'
 
 services:
+
+
   spcportal:
     build: .
     volumes:
@@ -49,6 +51,20 @@ services:
       - database_volume:/var/lib/postgresql/data
     ports: 
         - 5432:5432
+
+  prometheus:
+    image: prom/prometheus:v2.14.0
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    command:
+      - ‘config.file=/etc/prometheus/prometheus.yml’
+    ports:
+      - 9090:9090
+  
+  grafana:
+    image: grafana/grafana:6.5.2
+    ports:
+      - 3060:3000
 
 networks:  
   nginx_network:

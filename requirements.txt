@@ -13,6 +13,7 @@ django-crispy-forms==1.10.0
 django-extensions==3.0.9
 django-import-export==2.4.0
 django-multiselectfield==0.1.12
+django-prometheus==2.1.0
 django-pwa==1.0.10
 django-sslserver==0.22
 et-xmlfile==1.0.1
@@ -30,7 +31,7 @@ openpyxl==3.0.5
 packaging==20.7
 Pillow==8.0.1
 pluggy==0.13.1
-psycopg2==2.8.6
+prometheus-client==0.9.0
 py==1.9.0
 pycparser==2.20
 pydotplus==2.0.2
