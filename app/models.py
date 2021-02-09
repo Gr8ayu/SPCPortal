@@ -5,6 +5,7 @@ import datetime
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django_prometheus.models import ExportModelOperationsMixin
 # TODO update this department list
 DEPARTMENTS = (
             ('ISE', 'Information Science Engineering'),
@@ -46,7 +47,7 @@ class User(AbstractUser):
         return self.user_type == 'ADMIN'
 
 
-class Department(models.Model):
+class Department(ExportModelOperationsMixin('department') , models.Model):
     name = models.CharField(max_length=50 )
     # hod = models.ForeignKey(Faculties, on_delete=models.SET_NULL, null=True)
     description = models.TextField()
@@ -54,7 +55,7 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
-class Student(models.Model):
+class Student(ExportModelOperationsMixin('student') , models.Model):
 
     user = models.OneToOneField(User, on_delete =models.CASCADE, related_name='student' )
     name = models.CharField(max_length=100)
@@ -112,7 +113,7 @@ def save_edu_contact(sender, instance, **kwargs):
 
 
 
-class Contact(models.Model):
+class Contact(ExportModelOperationsMixin('contact') , models.Model):
     user = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='contact')
     city = models.CharField(max_length=50, blank=True)
     state = models.CharField(max_length=50, blank=True)
@@ -124,7 +125,7 @@ class Contact(models.Model):
     def __str__(self):
         return str(self.user)
 
-class  Education(models.Model):
+class  Education(ExportModelOperationsMixin('education') , models.Model):
     MODE  = (
             ("MGMT","Management"),
             ("KCET", "KCET" ),
@@ -158,7 +159,7 @@ class  Education(models.Model):
     def __str__(self):
         return str(self.user)
 
-class Company(models.Model):
+class Company(ExportModelOperationsMixin('company') , models.Model):
     COMPANY_CATEGORY = (
             ('Business Analytics','Business Analytics'),
             ('Communication and Engineering','Communication and Engineering'),
@@ -184,7 +185,7 @@ class Company(models.Model):
         return self.name
 
 
-class Offer(models.Model):
+class Offer(ExportModelOperationsMixin('offer') , models.Model):
     OFFER_TYPE = (
             ('DREAM',"Dream"),
             ('OPEN',"Open Dream"),
@@ -219,7 +220,7 @@ class Offer(models.Model):
     def accepted(self):
         return Application.objects.filter(offer=self).filter(status="ACCEPTED").count()
 
-class Application(models.Model):
+class Application(ExportModelOperationsMixin('application') , models.Model):
     STATUS = (
         ('PROCESSING','PROCESSING'),
         ('ACCEPTED','ACCEPTED'),
@@ -254,14 +255,14 @@ def save_edu_contact(sender, instance, **kwargs):
 
 
 
-class SPC(models.Model):
+class SPC(ExportModelOperationsMixin('spc') , models.Model):
     students = models.ForeignKey(Student, on_delete=models.CASCADE)
     role = models.CharField(max_length=20)
     def __str__(self):
         return self.students.name
 
 
-class Faculty(models.Model):
+class Faculty(ExportModelOperationsMixin('faculty') , models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True )
@@ -271,7 +272,7 @@ class Faculty(models.Model):
     def __str__(self):
         return self.name
 
-class DepartmentGroupEmail(models.Model):
+class DepartmentGroupEmail(ExportModelOperationsMixin('departmentgroupemail') , models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
     graduation_year = models.IntegerField()

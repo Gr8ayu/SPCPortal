@@ -57,10 +57,11 @@ services:
     volumes:
       - ./prometheus/:/etc/prometheus/
     command:
-      - ‘config.file=/etc/prometheus/prometheus.yml’
+      - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - 9090:9090
-  
+    networks: 
+      - prometheus_network
   grafana:
     image: grafana/grafana:6.5.2
     ports:
@@ -70,6 +71,8 @@ networks:
   nginx_network:
     driver: bridge
   database_network:  # <-- add the bridge
+    driver: bridge
+  prometheus_network:
     driver: bridge
 
 volumes:
