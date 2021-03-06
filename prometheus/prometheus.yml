@@ -1,11 +1,12 @@
 global:
-scrape_interval: 15s
-evaluation_interval: 15s
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
 rule_files:
 # — “first.rules”
 # — “second.rules”
+
 scrape_configs:
-— job_name: monitoring
-static_configs:
-— targets:
-— host.docker.internal
+ - job_name: monitoring
+   static_configs:
+     - targets: ['spcportal','nginx', 'localhost', '127.0.0.1'] ## IP Address of the localhost

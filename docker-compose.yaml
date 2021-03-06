@@ -5,6 +5,7 @@ services:
 
   spcportal:
     build: .
+    hostname: spcportal
     volumes:
       - .:/code
       - static_volume:/code/staticfiles  # <-- bind the static volume
@@ -18,6 +19,7 @@ services:
 
   nginx:
     image: nginx:1.13
+    # hostname: nginx
     ports:
       - 80:80
       - 443:443
@@ -57,7 +59,9 @@ services:
     volumes:
       - ./prometheus/:/etc/prometheus/
     command:
-      - ‘config.file=/etc/prometheus/prometheus.yml’
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - nginx_network
     ports:
       - 9090:9090
   

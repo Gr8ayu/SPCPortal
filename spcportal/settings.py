@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY','default_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1','rvians.online','www.rvians.online','34.72.197.163']
+ALLOWED_HOSTS = ['127.0.0.1','rvians.online','www.rvians.online','34.72.197.163','nginx']
 
 
 # Application definition
