@@ -1,21 +1,21 @@
 version: '3'
-
 services:
-
 
   spcportal:
     build: .
     hostname: spcportal
     volumes:
       - .:/code
-      - static_volume:/code/staticfiles  # <-- bind the static volume
+      - static_volume:/code/staticfiles #bind the static volume
       - media_volume:/code/media
-    networks:
+    # <-- using the network driver to connect
+    #  to other containers sharing same drivers
+    networks:  
       - nginx_network
       - database_network
-    depends_on:  # <-- wait for db to be "ready" before starting the app
+    depends_on:  
+    #wait for db to be "ready" before starting the app
       - postgres
-
 
   nginx:
     image: nginx:1.13
@@ -44,7 +44,8 @@ services:
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  postgres:  # <-- IMPORTANT: same name as in DATABASES setting, otherwise Django won't find the database!
+  postgres:  
+    # ^-- IMPORTANT: same name as in DATABASES setting, otherwise Django won't find the database!
     image: postgres:10
     restart: always
     env_file:  # <-- we use the previously defined values
@@ -67,6 +68,7 @@ services:
       - 9090:9090
     networks: 
       - prometheus_network
+
   grafana:
     hostname: grafana
     image: grafana/grafana:6.5.2
@@ -89,9 +91,9 @@ services:
     - /:/rootfs:ro
     - /var/run:/var/run:rw
     - /sys:/sys:ro
-    # - /var/lib/docker/:/var/lib/docker:ro
     depends_on:
     - redis
+
   redis:
     image: redis:latest
     container_name: redis

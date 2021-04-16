@@ -10,6 +10,7 @@ from django.conf import settings
 urlpatterns = [
     path('', include('pwa.urls')),
     path('', include('app.urls')),
+    path('api/', include('api.urls')),
     url('', include('django_prometheus.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
