@@ -23,13 +23,14 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY','default_key')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default_key')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1','rvians.online','www.rvians.online','34.72.197.163','nginx']
+ALLOWED_HOSTS = ['127.0.0.1', 'rvians.online',
+                 'www.rvians.online', '34.72.197.163', 'nginx']
 
 
 # Application definition
@@ -48,12 +49,12 @@ INSTALLED_APPS = [
     'app',
     'pwa',
     'sslserver',
-     'django.contrib.sites',   # <--
-     'crispy_forms',
-     'allauth',   # <--
-     'allauth.account',   # <--
-     'allauth.socialaccount',   # <--
-     'allauth.socialaccount.providers.google',   # <--
+    'django.contrib.sites',
+    'crispy_forms',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'django_prometheus',
 ]
 
@@ -90,31 +91,33 @@ TEMPLATES = [
 WSGI_APPLICATION = 'spcportal.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
- 'django.contrib.auth.backends.ModelBackend',
- 'allauth.account.auth_backends.AuthenticationBackend',
- )
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 # for development server
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get("ENV") == 'DEV':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 # For production server
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ.get('POSTGRES_DB'),
-#         'USER': os.environ.get('POSTGRES_USER'),
-#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-#         'HOST': 'postgres',
-#         'PORT': '',
-#     }
-# }
+if os.environ.get("ENV") == "PROD":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('POSTGRES_DB'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': 'postgres',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -182,7 +185,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-
 ACCOUNT_ADAPTER = 'adapters.CustomAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'adapters.CustomSocialAccountAdapter'
 
@@ -227,6 +229,4 @@ EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD") 
-
-
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
