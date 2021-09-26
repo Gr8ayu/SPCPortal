@@ -104,13 +104,13 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 # for development server
-if os.environ.get("ENV") == "DEV":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+}
 
 # For production server
 if os.environ.get("ENV") == "PROD":
