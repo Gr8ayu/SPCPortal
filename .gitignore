@@ -110,3 +110,5 @@ media/
 #**/migrations/**
 #!**/migrations
 #!**/migrations/__init__.py
+staticfiles/
+db.sqlite3.bak

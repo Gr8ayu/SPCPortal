@@ -2,6 +2,7 @@ import os
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -17,6 +18,6 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         # This is useful if you are using this for the Django Admin login.
         # Be careful with the staff setting, as some providers don't verify
         # email address, so that could be considered a security flaw.
-        #u.is_staff = u.email.split('@')[1] == "customdomain.com"
+        # u.is_staff = u.email.split('@')[1] == "customdomain.com"
 
-        return u.email.split('@')[1] == os.getenv("INSTITUTE_DOMAIN")
+        return u.email.split("@")[1] == os.getenv("INSTITUTE_DOMAIN")
